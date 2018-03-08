@@ -10,11 +10,11 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
-@app.route('/')
+@app.route('/hello')
 def hello_world():
   return render_template('index.html')
 
-@app.route('/hello')
+@app.route('/')
 def hello():
 	return "hi there"
 if __name__ == '__main__':
