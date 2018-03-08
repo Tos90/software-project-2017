@@ -24,7 +24,6 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
-
 class User(UserMixin, db.Model):
     __tablename__ = "registration_details"
     user_id = db.Column('ID',db.Integer , primary_key=True)
@@ -55,14 +54,11 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User %r>' % (self.username)
 
-
 class GamesTable(Base, db.Model):
     __tablename__="GamesTable"
     gameID=db.Column(db.Integer,db.ForeignKey('ActiveUsers.gameID'),primary_key=True,nullable=False,autoincrement=True)
     NumPlayers=db.Column(db.Integer, index=True, unique=False)
     activeUsers = db.relationship("ActiveUsers", backref="GamesTable")
-
-
 
     def __init__(self,NumPlayers):
         self.NumPlayers = NumPlayers
@@ -103,21 +99,15 @@ class Seat(Base,db.Model):
 		self.gameID = gameID
 		self.seatNum = seatNum
 
-
-
 class Deck(Base,db.Model):
 	__tablename__="Deck"
 	deck_id = db.Column("ID",db.Integer,primary_key=True)
 	card = db.Column("card",db.String(255))
 	gameID = db.column("gameID",db.String(255))
 
-
 	def __init__(self,card,gameID):
 		self.card = card
 		self.gameID = gameID
-
-
-
 
 class ActiveUsers(Base, db.Model):
     __tablename__="ActiveUsers"
@@ -125,11 +115,8 @@ class ActiveUsers(Base, db.Model):
     username=db.Column(db.String(30), index=True, unique=True)
     gameID=db.Column(db.Integer,nullable=False)
 
-
     def __init__(self):
         self.username = current_user.username
-
-
 
 class LoginForm(FlaskForm): #define login form for bootstrap
     username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
@@ -149,8 +136,6 @@ class Lobby(Table):
     def __init__(self, gameID, numPlayers):
        self.gameID = gameID
        self.numPlayers = numPlayers
-
-
 
 @login_manager.user_loader
 def load_user(user_id):
@@ -543,4 +528,5 @@ def leaveGame():
 	return render_template('lobby.html',gamesDict=gamesDict, usersDict=usersDict)
 
 if __name__ == '__main__':
+	app.run()
 	app.run(debug=True)
