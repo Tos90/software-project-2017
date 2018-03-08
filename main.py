@@ -158,7 +158,7 @@ def load_user(user_id):
 
 @app.route('/') #index page
 def index():
-    return render_template('index.html')
+    return 'helllo there'
 
 @app.route('/login', methods=['GET', 'POST']) #login page
 def login():
@@ -542,7 +542,5 @@ def leaveGame():
 
 	return render_template('lobby.html',gamesDict=gamesDict, usersDict=usersDict)
 
-
 if __name__ == '__main__':
-    
-    app.run(debug=True)
+	app.run(debug=True)
