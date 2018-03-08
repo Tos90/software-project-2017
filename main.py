@@ -47,6 +47,14 @@ class User(UserMixin, db.Model):
 
     def __repr__(self):
         return '<User %r>' % (self.username)
+class GamesTable(db.Model):
+    __tablename__="GamesTable"
+    gameID=db.Column(db.Integer,db.ForeignKey('ActiveUsers.gameID'),primary_key=True,nullable=False,autoincrement=True)
+    NumPlayers=db.Column(db.Integer, index=True, unique=False)
+    activeUsers = db.relationship("ActiveUsers", backref="GamesTable")
+
+    def __init__(self,NumPlayers):
+        self.NumPlayers = NumPlayers
 
 @app.route('/hello')
 def hello_world():
