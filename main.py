@@ -79,21 +79,7 @@ class Actions(Base,db.Model):
 		self.handvalue = action_handValue
 		self.stake = action_stake
 		self.timestamp = action_time
-
-class Seat(Base,db.Model):
-	__tablename__="SeatsTable"
-	seat_id = db.Column("ID",db.Integer,primary_key=True)
-	username = db.Column("username",db.String(255))
-	gameID = db.Column("GameID",db.Integer)
-	seatNum = db.Column("SeatNum",db.Integer)
-	timestamp = db.Column("timestamp",db.DateTime,default=datetime.datetime.utcnow)
-
-	def __init__(self,username,gameID,seatNum):
-		self.username = username
-		self.gameID = gameID
-		self.seatNum = seatNum
-
-
+		
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
