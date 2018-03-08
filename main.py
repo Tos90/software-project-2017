@@ -10,6 +10,7 @@ from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
+app.config['SECRET_KEY'] = 'secret'
 
 @app.route('/hello')
 def hello_world():
