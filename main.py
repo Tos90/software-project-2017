@@ -1,9 +1,9 @@
-from flask import Flask
+from flask import Flask,render_template, redirect, url_for, session, request, flash
 app = Flask(__name__)
 
 @app.route('/')
 def hello_world():
-  return render_template('blackjack.html')
+  return render_template('index.html')
 
 @app.route('/hello')
 def hello():
