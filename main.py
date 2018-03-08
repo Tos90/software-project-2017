@@ -18,6 +18,36 @@ login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = 'login'
 
+class User(UserMixin, db.Model):
+    __tablename__ = "registration_details"
+    user_id = db.Column('ID',db.Integer , primary_key=True)
+    username = db.Column('username', db.String(255))
+    password = db.Column('password', db.String(255))
+    email = db.Column('email', db.String(255))
+    balance = db.Column('balance', db.Integer)
+
+    def __init__(self, user_id, username ,password, email, balance):
+        self.user_id = user_id
+        self.username = username
+        self.password = password
+        self.email = email
+        self.balance = balance
+
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+
+    def is_anonymous(self):
+        return False
+
+    def get_id(self):
+        return unicode(self.user_id)
+
+    def __repr__(self):
+        return '<User %r>' % (self.username)
+
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
