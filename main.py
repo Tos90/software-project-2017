@@ -1,4 +1,5 @@
 from flask import Flask,render_template, redirect, url_for, session, request, flash
+from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__)
 
