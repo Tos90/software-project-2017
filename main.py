@@ -7,10 +7,7 @@ from wtforms.validators import InputRequired, Email, Length
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from flask_table import Table, Col, LinkCol
 from sqlalchemy.ext.declarative import declarative_base
-from time import gmtime, strftime
-from dealer import Dealer
-from deck import Deck
-import datetime
+
 app = Flask(__name__)
 
 @app.route('/')
