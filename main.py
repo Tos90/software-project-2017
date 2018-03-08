@@ -93,24 +93,6 @@ class Seat(Base,db.Model):
 		self.gameID = gameID
 		self.seatNum = seatNum
 
-class Deck(Base,db.Model):
-	__tablename__="Deck"
-	deck_id = db.Column("ID",db.Integer,primary_key=True)
-	card = db.Column("card",db.String(255))
-	gameID = db.column("gameID",db.String(255))
-
-	def __init__(self,card,gameID):
-		self.card = card
-		self.gameID = gameID
-
-class ActiveUsers(Base, db.Model):
-    __tablename__="ActiveUsers"
-    ID=db.Column(db.Integer,primary_key=True)
-    username=db.Column(db.String(30), index=True, unique=True)
-    gameID=db.Column(db.Integer,nullable=False)
-
-    def __init__(self):
-        self.username = current_user.username
 
 @app.route('/hello')
 def hello_world():
