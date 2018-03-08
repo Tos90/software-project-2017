@@ -1,5 +1,7 @@
 from flask import Flask,render_template, redirect, url_for, session, request, flash
 from flask_bootstrap import Bootstrap
+from flask_wtf import FlaskForm
+
 
 app = Flask(__name__)
 
