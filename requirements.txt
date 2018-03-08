@@ -3,7 +3,6 @@ sqlalchemy==0.7.9
 Flask-SQLAlchemy==2.3.2
 sqlalchemy-migrate==0.7.2
 flask-whooshalchemy==0.55a
-flask-wtf==0.8.4
 Flask-WTF==0.14.2
 pytz==2013b
 flask-babel==0.8
