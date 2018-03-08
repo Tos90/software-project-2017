@@ -112,15 +112,6 @@ class ActiveUsers(Base, db.Model):
     def __init__(self):
         self.username = current_user.username
 
-class LoginForm(FlaskForm): #define login form for bootstrap
-    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
-    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
-
-class RegisterForm(FlaskForm): #define registration form for bootstrap
-    email = StringField('email', validators=[InputRequired(), Length(max=50), Email("This field requires a valid email address")])
-    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
-    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
-
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
