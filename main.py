@@ -48,6 +48,79 @@ class User(UserMixin, db.Model):
     def __repr__(self):
         return '<User %r>' % (self.username)
 
+class GamesTable(Base, db.Model):
+    __tablename__="GamesTable"
+    gameID=db.Column(db.Integer,db.ForeignKey('ActiveUsers.gameID'),primary_key=True,nullable=False,autoincrement=True)
+    NumPlayers=db.Column(db.Integer, index=True, unique=False)
+    activeUsers = db.relationship("ActiveUsers", backref="GamesTable")
+
+    def __init__(self,NumPlayers):
+        self.NumPlayers = NumPlayers
+
+class Actions(Base,db.Model):
+	__tablename__ = "Actions"
+	action_id = db.Column('ID', db.Integer, primary_key=True)
+	action_name = db.Column('username', db.String(255))
+	action_type = db.Column('type', db.String(255))
+	action_game = db.Column('gameID', db.Integer)
+	action_move = db.Column('action',db.String(255))
+	action_hand = db.Column('hand', db.String(255))
+	action_handValue = db.Column('handValue', db.Integer)
+	action_stake = db.Column('stake',db.Integer)
+	action_time = db.Column('action_time',db.DateTime,default=datetime.datetime.utcnow)
+
+	def __init__(self,action_id,action_name,action_type,actions_game,action_move,action_hand,action_handValue,action_stake,action_time):
+		self.id = action_id
+		self.username = action_name
+		self.type = action_type
+		self.gameID = action_game
+		self.move = action_move
+		self.hand = action_hand
+		self.handvalue = action_handValue
+		self.stake = action_stake
+		self.timestamp = action_time
+
+class Seat(Base,db.Model):
+	__tablename__="SeatsTable"
+	seat_id = db.Column("ID",db.Integer,primary_key=True)
+	username = db.Column("username",db.String(255))
+	gameID = db.Column("GameID",db.Integer)
+	seatNum = db.Column("SeatNum",db.Integer)
+	timestamp = db.Column("timestamp",db.DateTime,default=datetime.datetime.utcnow)
+
+	def __init__(self,username,gameID,seatNum):
+		self.username = username
+		self.gameID = gameID
+		self.seatNum = seatNum
+
+class Deck(Base,db.Model):
+	__tablename__="Deck"
+	deck_id = db.Column("ID",db.Integer,primary_key=True)
+	card = db.Column("card",db.String(255))
+	gameID = db.column("gameID",db.String(255))
+
+	def __init__(self,card,gameID):
+		self.card = card
+		self.gameID = gameID
+
+class ActiveUsers(Base, db.Model):
+    __tablename__="ActiveUsers"
+    ID=db.Column(db.Integer,primary_key=True)
+    username=db.Column(db.String(30), index=True, unique=True)
+    gameID=db.Column(db.Integer,nullable=False)
+
+    def __init__(self):
+        self.username = current_user.username
+
+class LoginForm(FlaskForm): #define login form for bootstrap
+    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
+    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
+
+class RegisterForm(FlaskForm): #define registration form for bootstrap
+    email = StringField('email', validators=[InputRequired(), Length(max=50), Email("This field requires a valid email address")])
+    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
+    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
+
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
