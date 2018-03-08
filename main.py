@@ -1,6 +1,7 @@
 from flask import Flask,render_template, redirect, url_for, session, request, flash
 from flask_bootstrap import Bootstrap
 from flask_wtf import FlaskForm
+from wtforms import StringField, PasswordField, BooleanField
 
 
 app = Flask(__name__)
