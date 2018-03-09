@@ -370,6 +370,11 @@ def lobby():
             gamesDict[str(tuples[0])]=str(tuples[1])
     #print(gamesDict)
     return render_template('lobby.html',gamesDict=gamesDict, usersDict=usersDict)
+@app.route('/logout') #logs out the current user
+@login_required
+def logout():
+    logout_user()
+    return redirect(url_for('index'))
 @app.route('/')
 def hello():
 	return "hi there"
