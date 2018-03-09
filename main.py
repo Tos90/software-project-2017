@@ -6,7 +6,8 @@ from wtforms.validators import InputRequired, Email, Length
 from flask_login import LoginManager, UserMixin, login_user, login_required, logout_user, current_user
 from sqlalchemy.ext.declarative import declarative_base
 from flask_sqlalchemy import SQLAlchemy
-
+import datetime
+from time import gmtime, strftime
 
 app = Flask(__name__)
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = True
@@ -60,6 +61,28 @@ class ActiveUsers(db.Model):
     ID=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(30), index=True, unique=True)
     gameID=db.Column(db.Integer,nullable=False)
+class Actions(db.Model):
+	__tablename__ = "Actions"
+	action_id = db.Column('ID', db.Integer, primary_key=True)
+	action_name = db.Column('username', db.String(255))
+	action_type = db.Column('type', db.String(255))
+	action_game = db.Column('gameID', db.Integer)
+	action_move = db.Column('action',db.String(255))
+	action_hand = db.Column('hand', db.String(255))
+	action_handValue = db.Column('handValue', db.Integer)
+	action_stake = db.Column('stake',db.Integer)
+	action_time = db.Column('action_time',db.DateTime,default=datetime.datetime.utcnow)
+
+	def __init__(self,action_id,action_name,action_type,actions_game,action_move,action_hand,action_handValue,action_stake,action_time):
+		self.id = action_id
+		self.username = action_name
+		self.type = action_type
+		self.gameID = action_game
+		self.move = action_move
+		self.hand = action_hand
+		self.handvalue = action_handValue
+		self.stake = action_stake
+		self.timestamp = action_time
 
     def __init__(self):
         self.username = current_user.username
