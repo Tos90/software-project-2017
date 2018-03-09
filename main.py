@@ -106,6 +106,52 @@ def login():
 @login_required
 def waiting(): 
     return render_template("waiting.html")
+@app.route('/newhand',methods=['GET','POST'])
+def newhand():
+	hand_count = 0
+	handScore = 0
+	hand = ""
+	playerName = session['username']
+	whichGame = ActiveUsers.query.filter_by(username=playerName).first()
+	gameID = whichGame.gameID
+	global deck
+	clear_deck = Deck.query.filter_by(gameID=gameID)
+	db.session.delete(clear_deck)
+	db.session.commit()
+	
+	while hand_count < 2:
+		nextcard = str(deck[0])
+		cardsplayed = Deck.query.filter_by(gameID=gameID).all()
+		
+		if nextcard not in cardsplayed:
+			handScore += deck[0]._cardValue
+			newcard = Deck(card=nextcard,gameID=gameID)
+			db.session.add(newcard)
+			db.session.commit()
+			hand_count += 1
+			deck.remove(deck[0])
+			hand += "," + nextcard
+		else:
+			deck.remove(deck[0])
+
+	#get the line of dealer
+	dealer_go = Actions.query.filter_by(type="dealer",gameID=game.gameID)
+	current_time = datetime.datetime.now().time()
+	diff_time = dealer.timestamp - current_time
+	if diff_time < 3000: #gamelength
+		dealer = Dealer()
+		dealer_go.hand = dealer._handlst
+		dealer_go.handValue = dealer._handValue
+		dealer._go.timestamp = datetime.datetime.now().time()
+		db.session.commit()
+	#check if time is more than gamelength older that current time
+	#if it is deal away mad
+	#other wise pass	
+	updatePlayerHand = Actions(action_name=playerName,action_type="player",action_game=gameID,action_move="new_hand",action_hand=hand,action_value=handScore,action_stake=0)
+	db.session.add(updatePlayerHand)
+	db.session.commit()
+	nextCard= json.dumps(deck[0])
+	return (handScore)
 
 @app.route('/hello')
 def hello_world():
