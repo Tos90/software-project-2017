@@ -242,6 +242,13 @@ def getNewCard():
 	deck.remove(deck[0])
 	nextCard= json.dumps(deck[0])
 	return(nextCard)
+	
+@app.route('/cardValue')
+def cardValue():
+	#convert dealers card to a json object and return to javascript
+	global dealerCard
+	dealerCard = json.dumps(dealerCard)
+	return(dealerCard)
 @app.route("/betting",methods = ['POST'])
 #apply players bet
 def bet():
