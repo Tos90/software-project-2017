@@ -352,6 +352,25 @@ def joingame():
 	db.session.add(player)
 	db.session.commit()
 	return render_template("blackjack.html", username=username, seatnum=seatnum)
+@app.route('/lobby',methods=['GET','POST'])   
+def lobby():
+    usersDict={}
+    gamesDict={}
+    gameplayers=db.session.query(ActiveUsers.username,ActiveUsers.gameID).all()
+    for tuples in gameplayers:
+        if str(tuples[1]) not in usersDict:
+            usersDict[str(tuples[1])]=[str(tuples[0])]
+        else:
+            usersDict[str(tuples[1])]+=[str(tuples[0])]
+    #print(usersDict)
+    gamelist = db.session.query(GamesTable.gameID,GamesTable.NumPlayers).all()
+    #print(gamelist)
+    for tuples in gamelist:
+        if str(tuples[0]) not in gamesDict:
+            gamesDict[str(tuples[0])]=str(tuples[1])
+    #print(gamesDict)
+    return render_template('lobby.html',gamesDict=gamesDict, usersDict=usersDict)
+
 @app.route('/')
 def hello():
 	return "hi there"
