@@ -496,6 +496,6 @@ def leaveGame():
 	return render_template('lobby.html',gamesDict=gamesDict, usersDict=usersDict)
 @app.route('/')
 def hello():
-	return "hi there"
+	return render_template('index.html')
 if __name__ == '__main__':
   app.run()
