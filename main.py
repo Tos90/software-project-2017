@@ -84,6 +84,14 @@ class RegisterForm(FlaskForm): #define registration form for bootstrap
     email = StringField('email', validators=[InputRequired(), Length(max=50), Email("This field requires a valid email address")])
     username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
     password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
+class Lobby(Table):
+    gameId=Col('ID')
+    count=Col('Number of Players')
+    users=Col('users')
+    
+    def __init__(self, gameID, numPlayers):
+       self.gameID = gameID
+       self.numPlayers = numPlayers
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
