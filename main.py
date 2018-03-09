@@ -63,29 +63,6 @@ class ActiveUsers(db.Model):
 
     def __init__(self):
         self.username = current_user.username
-class Actions(db.Model):
-	__tablename__ = "Actions"
-	action_id = db.Column('ID', db.Integer, primary_key=True)
-	action_name = db.Column('username', db.String(255))
-	action_type = db.Column('type', db.String(255))
-	action_game = db.Column('gameID', db.Integer)
-	action_move = db.Column('action',db.String(255))
-	action_hand = db.Column('hand', db.String(255))
-	action_handValue = db.Column('handValue', db.Integer)
-	action_stake = db.Column('stake',db.Integer)
-	action_time = db.Column('action_time',db.DateTime,default=datetime.datetime.utcnow)
-
-	def __init__(self,action_id,action_name,action_type,actions_game,action_move,action_hand,action_handValue,action_stake,action_time):
-		self.id = action_id
-		self.username = action_name
-		self.type = action_type
-		self.gameID = action_game
-		self.move = action_move
-		self.hand = action_hand
-		self.handvalue = action_handValue
-		self.stake = action_stake
-		self.timestamp = action_time
-
 
 @app.route('/hello')
 def hello_world():
