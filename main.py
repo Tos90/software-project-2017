@@ -371,7 +371,6 @@ def lobby():
     #print(gamesDict)
     return render_template('lobby.html',gamesDict=gamesDict, usersDict=usersDict)
 @app.route('/getWinner',methods = ['GET','POST'])
- # find out who won by comparing total hand values
 def compareHands():
 	username = session['username']
 	game = ActiveUsers.query.filter_by(username=username).first()
