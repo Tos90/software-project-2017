@@ -77,6 +77,9 @@ class Seat(db.Model):
 		self.username = username
 		self.gameID = gameID
 		self.seatNum = seatNum
+class LoginForm(FlaskForm): #define login form for bootstrap
+    username = StringField('username', validators=[InputRequired(), Length(min=4, max=15)])
+    password = PasswordField('password', validators=[InputRequired(), Length(min=8, max=80)])
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
