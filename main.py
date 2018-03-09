@@ -296,7 +296,47 @@ def createGame(): #create new instance of game and insert game into games table 
 		seat = Seat(username=username,gameID=game.gameID,seatNum=1)
 		db.session.add(seat)
 		db.session.commit()
-		return render_template("blackjack.html" ,balance=balance) 
+		return render_template("blackjack.html" ,balance=balance)
+@app.route('/gameinfo')
+def getInfo():
+	currentAction = Actions.query.filter_by(timestamp=db.func.max(Actions.action_time))
+	if currentAction.action_move == 'deal':
+		#get currentAction.action_name's seat number
+		#sc player queries SeatsTable for seat number using their username as key
+		player = SeatsTable.query.filter_by(username=currentAction._username).first()
+		seatnum = player.SeatNum
+		#sc handsplit splits the hand into strings for each card e.g "80fHearts"
+		handsplit = currentAction.action_hand.split(",")
+		#sc Returns the first 2 cards in players hand along with seat number and handvalue
+		return({'hand1':handsplit[0],'hand2':handsplit[1],'seatnum':seatnum,'value':currentAction_handValue})
+	elif currentAction.action_move == 'bet':
+		#get currentAction.action_name's seat number
+		#sc player queries SeatsTable for seat number using their username as key
+		player = SeatsTable.query.filter_by(username=currentAction._username).first()
+		seatnum = player.SeatNum
+		return({'bet':currentAction.action_hand,'seatnum':seatnum})
+	elif currentAction.action_move == 'hit':
+		#get currentAction.action_name's seat number
+		#sc player queries SeatsTable for seat number using their username as key
+		player = SeatsTable.query.filter_by(username=currentAction._username).first()
+		seatnum = player.SeatNum
+		#split the hand from hit and return the most recent card dealt
+		#sc handsplit returns a list of strings that are the names of the players cards
+		handsplit = currentAction.action_hand.split(",")
+		#sc this for loop runs through the list of strings to find the last card added
+		count = -1
+		for item in handsplit :
+			count += 1
+		    #sc this then returns the last card, seat number and handvalue
+		return({'hand3':handsplit[count],'seatnum':seatnum,'value':currentAction_handValue})
+	elif currentAction.action_move == 'stay':
+		#get currentAction.acion_name's seat number
+		#sc player queries SeatsTable for seat number using their username as key
+		player = SeatsTable.query.filter_by(username=currentAction._username).first()
+		seatnum = player.SeatNum
+		return({'seatnum':seatnum,'value':currentAction_handValue})
+	# return if each player wins or loses does it really matter?
+	return('working') 
 @app.route('/')
 def hello():
 	return "hi there"
