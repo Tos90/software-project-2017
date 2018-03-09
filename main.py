@@ -130,6 +130,36 @@ def login():
 @login_required
 def waiting(): 
     return render_template("waiting.html")
+def newGame():
+	dealer = Dealer()
+	dealerdb= Actions(action_name="dealer",action_type="dealer",action_game=1,action_move="deal",action_hand=str(dealer._handlst[0])+","+str(dealer._handlst[1]),action_handValue=int(dealer._handValue),action_stake=0)
+	db.session.add(dealerdb)
+	db.session.commit()
+	global dealerCard
+	dealerCard = str(dealer._handlst[0]) # dealers first card
+	global dealerValue
+	dealerValue = int(dealer._handValue) # dealers total value
+	global dv
+	dv = dealerValue
+	player = Player(dealer)
+	player.startingHand(dealer)
+	global playerName
+	playerName = ActiveUsers.query.filter_by(ID=player._id).first()
+	playerdb= Actions(action_name=playerName,action_type="player",action_game=1,action_move="deal",action_hand=str(player._handlst[0])+','+str(player._handlst[1]),action_handValue=int(dealer._handValue),action_stake=0)
+	db.session.add(playerdb)
+	db.session.commit()
+	global playerCard1
+	playerCard1 = str(player._handlst[0]) # players first card
+	global playerCard2
+	playerCard2= str(player._handlst[1]) # palyers second card
+	global playerCardHand
+	playerCardHand = int(player._handValue) # players total value
+	global pv
+	pv= playerCardHand
+	global deck
+	deck = dealer._deck # store remaining cards
+	print(str(deck[0]))
+	return('hi new game started')
 @app.route('/newhand',methods=['GET','POST'])
 def newhand():
 	hand_count = 0
