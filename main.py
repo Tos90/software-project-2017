@@ -336,7 +336,22 @@ def getInfo():
 		seatnum = player.SeatNum
 		return({'seatnum':seatnum,'value':currentAction_handValue})
 	# return if each player wins or loses does it really matter?
-	return('working') 
+	return('working')
+@app.route('/joingame', methods=['GET','POST'])
+def joingame():
+	username = session['username']
+	gameID = request.args.get('gameID')
+	seatslist = Seat.query.filter_by(gameID=gameID).all()
+	for i in range(len(seatlist)-1):
+		if i not in seatlist:
+			playerSeat = Seat(username=username,gameID=gameID,seatNum=i)
+	game= GamesTable.query.filter_by(gameID)
+	game.numPlayers += 1
+	db.session.commit()
+	player = ActiveUsers(username=username,gameID=gameID)
+	db.session.add(player)
+	db.session.commit()
+	return render_template("blackjack.html", username=username, seatnum=seatnum)
 @app.route('/')
 def hello():
 	return "hi there"
