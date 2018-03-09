@@ -60,6 +60,9 @@ class ActiveUsers(db.Model):
     ID=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(30), index=True, unique=True)
     gameID=db.Column(db.Integer,nullable=False)
+
+    def __init__(self):
+        self.username = current_user.username
 class Actions(db.Model):
 	__tablename__ = "Actions"
 	action_id = db.Column('ID', db.Integer, primary_key=True)
@@ -83,8 +86,6 @@ class Actions(db.Model):
 		self.stake = action_stake
 		self.timestamp = action_time
 
-    def __init__(self):
-        self.username = current_user.username
 
 @app.route('/hello')
 def hello_world():
