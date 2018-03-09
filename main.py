@@ -226,7 +226,21 @@ def bet():
 	db.session.commit()	
 	playerNum = request.form['player']
 	return (updateBal.balance)
-
+@app.route("/stay",methods = ['POST'])
+def stay():
+	playerName = session['username']
+	whichGame = ActiveUsers.query.filter_by(username=playerName).first()
+	gameID = whichGame.gameID
+	game = GamesTable.query.filter_by(gameID=gameID)
+	if playNum == 4:
+		playerAct = Actions(action_name=playerName,action_type="player",action_game=gameID,action_move="stay")
+		db.session.add(playerAct)
+		db.session.commit()
+		return('endgame')
+	else:
+		playerAct = Actions(action_name=playerName,action_type="player",action_game=gameID,action_move="stay")
+		db.session.add(playerAct)
+		db.session.commit()
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
