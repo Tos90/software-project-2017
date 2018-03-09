@@ -152,7 +152,42 @@ def newhand():
 	db.session.commit()
 	nextCard= json.dumps(deck[0])
 	return (handScore)
-
+@app.route("/hit")
+def getNewCard():
+	#get new card by removing and updating deck
+	switch = True
+	playerName = session['username']
+	whichGame = ActiveUsers.query.filter_by(username=playerName).first()
+	gameID = whichGame.gameID
+	global deck
+	cardsplayed = Deck.query.filter_by(gameID=gameID).all()
+	Hand = Actions.query.filter_by(username=playerName).first()
+	nextCard = str(deck[0])
+	Hand.handValue += deck[0]._cardValue
+	while switch:
+		if nextcard not in cardsplayed:
+			newcard = Deck(nextcard,gameID)
+			db.session.add(newcard)
+			db.session.commit()
+			Hand.hand += nextcard
+			switch = False
+			if deck[0]._name[0] == "A":
+				if action._handValue >= 11:
+					nextCard._cardValue = 1
+				else:
+					for item in Hand.action_hand :
+						if item[0] == "A" :
+							if action._handValue >= 11:
+								item._cardValue = 1
+		else:
+			deck.remove(deck[0])
+			nextCard = str(deck[0])
+	updatePlayerHand = Actions(action_name=playerName,action_type="player",action_game=gameID,action_move="hit",action_hand=Hand.hand,action_value=Hand.handValue,action_stake=0)
+	db.session.add(updatePlayerHand)
+	db.session.commit()
+	deck.remove(deck[0])
+	nextCard= json.dumps(deck[0])
+	return(nextCard)
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
