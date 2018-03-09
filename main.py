@@ -269,6 +269,34 @@ def dashboard():
     games=GamesTable.query.all()
     gamesList = GamesTable.query.join(ActiveUsers, GamesTable.gameID==ActiveUsers.gameID).add_columns(GamesTable.gameID, GamesTable.NumPlayers).filter(GamesTable.gameID == ActiveUsers.gameID)
     return render_template('blackjack.html', name=current_user.username,gamesList=gamesList)
+@app.route('/createGame', methods=['GET', 'POST'])
+@login_required
+def createGame(): #create new instance of game and insert game into games table and user into active users
+	#activeuser = ActiveUsers.query(ActiveUsers.username).all()
+	username=session['username']
+	activeusers = db.session.query(ActiveUsers.username).all()
+	checker = ActiveUsers.query.filter_by(username=username)
+	balance = db.session.query(User).filter_by(username=username).first()
+	if checker:
+		print("already there biy")
+		print(balance)
+		return render_template("blackjack.html", username=username,balance=balance)
+	else:
+		username = session['username']
+		balance = db.session.query(User.balance).filter_by(username=username).first()
+		print(user)
+		game = GamesTable(NumPlayers = 1) #not sure if gameid can be called after this. possibly need select statement to activeusers
+		db.session.add(game)
+		db.session.commit()
+		activeUsers = ActiveUsers()
+		activeUsers.username = username
+		activeUsers.gameID = game.gameID
+		db.session.add(activeUsers)
+		db.session.commit()
+		seat = Seat(username=username,gameID=game.gameID,seatNum=1)
+		db.session.add(seat)
+		db.session.commit()
+		return render_template("blackjack.html" ,balance=balance) 
 @app.route('/')
 def hello():
 	return "hi there"
