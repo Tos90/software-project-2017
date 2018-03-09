@@ -244,7 +244,25 @@ def stay():
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
+@app.route('/register', methods=['GET', 'POST'])
+def signup():
 
+    form = RegisterForm()
+
+    username = form.username.data #collects data from registration form
+    password = form.password.data
+    email = form.email.data
+    balance = 1000
+
+    if form.validate_on_submit():
+        if request.method == 'GET':
+            return render_template('register.html')
+        user = User(0, username , password, email, balance)
+        db.session.add(user)
+        db.session.commit()
+        flash('User successfully registered')
+        return redirect(url_for('login'))
+    return render_template('register.html', form=form)
 @app.route('/')
 def hello():
 	return "hi there"
