@@ -8,6 +8,8 @@ from sqlalchemy.ext.declarative import declarative_base
 from flask_sqlalchemy import SQLAlchemy
 import datetime
 from time import gmtime, strftime
+import random
+
 
 
 app = Flask(__name__)
