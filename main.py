@@ -375,6 +375,27 @@ def lobby():
 def logout():
     logout_user()
     return redirect(url_for('index'))
+@app.route('/leavegame')
+def leaveGame():
+	username = session['username']
+	active_me = ActiveUsers.query.filter_by(username=username).first()
+	gameID = active_me.gameID
+	db.session.delete(active_me)
+	db.session.commit()
+
+	#activeusers
+	game = GamesTable.query.filter_by(gameID = gameID)
+	game.numPlayers -= 1
+	#gemas table reduced numPlayers
+	#update seatstab
+	seat_me = Seat.query.filter_by(username=username)
+	db.session.delete(seat_me)
+	db.session.commit()
+	#remove from chattable
+	chat_me = Chat.query.filter_by(username=username)
+	db.session.delete(chat_me)
+	db.session.commit()
+	return render_template('lobby.html',gamesDict=gamesDict, usersDict=usersDict)
 @app.route('/')
 def hello():
 	return "hi there"
