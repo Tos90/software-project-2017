@@ -102,6 +102,11 @@ def login():
     session['username'] = username
     flash('Logged in successfully')
     return redirect(request.args.get('next') or url_for('lobby'))
+@app.route('/waiting', methods=['GET', 'POST'])
+@login_required
+def waiting(): 
+    return render_template("waiting.html")
+
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
