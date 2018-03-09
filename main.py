@@ -242,7 +242,7 @@ def getNewCard():
 	deck.remove(deck[0])
 	nextCard= json.dumps(deck[0])
 	return(nextCard)
-	
+
 @app.route('/cardValue')
 def cardValue():
 	#convert dealers card to a json object and return to javascript
@@ -280,6 +280,57 @@ def stay():
 		playerAct = Actions(action_name=playerName,action_type="player",action_game=gameID,action_move="stay")
 		db.session.add(playerAct)
 		db.session.commit()
+@app.route('/getWinner')
+# find out who won by compareing total hand values
+def compareHands():
+	global dv
+	dv = dv
+	global pv
+	pv = pv
+	print(pv)
+	if dv > 21:
+		playerAct =Actions(action_name=playerName,action_type='Player',actions_game=1,action_move='player wins')
+		dealerAct = Actions(action_name='dealer',action_type='dealer',actions_game=1,action_move='dealer loses')
+		db.session.add(playerAct)
+		db.session.add(dealerAct)
+		db.swession.commit()
+		return ("player wins dealer busts")
+	elif(pv>21):
+		dealerAct = Actions(action_name='dealer',action_type='dealer',actions_game=1,action_move='dealer wins')
+		playerAct =Actions(action_name=playerName,action_type='Player',actions_game=1,action_move='playerloses')
+		db.session.add(playerAct)
+		db.session.add(dealerAct)
+		db.swession.commit()		
+		return(" house wins player busts")
+	elif(dv==pv):
+		playerAct =Actions(action_name=playerName,action_type='Player',actions_game=1,action_move='draw')
+		dealerAct = Actions(action_name='dealer',action_type='dealer',actions_game=1,action_move='draw')
+		db.session.add(playerAct)
+		db.session.add(dealerAct)
+		db.swession.commit()
+		return ("Draw dealer and player have same total")
+
+	elif(pv>dv):
+		playerAct =Actions(action_name=playerName,action_type='Player',actions_game=1,action_move='player wins')
+		dealerAct = Actions(action_name='dealer',action_type='dealer',actions_game=1,action_move='dealer loses')
+		db.session.add(playerAct)
+		db.session.add(dealerAct)
+		db.swession.commit()
+		return("player wins")
+	elif dv < pv:
+		playerAct =Actions(action_name=playerName,action_type='Player',actions_game=1,action_move='player wins')
+		dealerAct = Actions(action_name='dealer',action_type='dealer',actions_game=1,action_move='dealer loses')
+		db.session.add(playerAct)
+		db.session.add(dealerAct)
+		db.swession.commit()		
+		return("player wins")
+	else :
+		dealerAct = Actions(action_name='dealer',action_type='dealer',actions_game=1,action_move='dealer wins')
+		playerAct =Actions(action_name=playerName,action_type='Player',actions_game=1,action_move='player loses')
+		db.session.add(playerAct)
+		db.session.add(dealerAct)
+		db.swession.commit()
+		return ("dealer wins")
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
