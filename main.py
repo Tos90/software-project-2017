@@ -331,6 +331,14 @@ def compareHands():
 		db.session.add(dealerAct)
 		db.swession.commit()
 		return ("dealer wins")
+@app.route("/updatePlayerInfo", methods=['POST'])
+def updatePInfo():
+	paid = request.form['paid']
+	if paid:
+		playerBal = User.query.filter_by(playerName)
+		playerBal.balance+=request.form['amount']
+		db.session.commit()
+
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
