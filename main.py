@@ -188,6 +188,22 @@ def getNewCard():
 	deck.remove(deck[0])
 	nextCard= json.dumps(deck[0])
 	return(nextCard)
+@app.route("/betting",methods = ['POST'])
+#apply players bet
+def bet():
+	playerBet=request.json['bet']
+	print(playerBet)
+	whichGame = ActiveUsers.query.filter_by(username=playerName).first()
+	gameID = whichGame.gameID
+	username = session['username']
+	playerdb= Actions(action_name=username,action_type="player",action_game=gameID,action_move="bet",action_stake=playerBet)
+	db.session.add(playerdb)
+	db.session.commit()
+	updateBal= User.query.filter_by(username=playerName)
+	updateBal.balance -= playerBet
+	db.session.commit()	
+	playerNum = request.form['player']
+	return (updateBal.balance)
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
