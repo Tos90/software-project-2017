@@ -370,7 +370,59 @@ def lobby():
             gamesDict[str(tuples[0])]=str(tuples[1])
     #print(gamesDict)
     return render_template('lobby.html',gamesDict=gamesDict, usersDict=usersDict)
-
+@app.route('/getWinner',methods = ['GET','POST'])
+ # find out who won by comparing total hand values
+def compareHands():
+	username = session['username']
+	game = ActiveUsers.query.filter_by(username=username).first()
+	gameID = game.gameID
+	player = Actions.query.filter_by(action_name=username,action_move='bet').first()
+	winnings = (player.stake)*2
+	user = User.query.filter_by(username=username)
+	player = Actions.query.filter_by(username=username,gameId=gameID).first()
+	dealer1 = Actions.query.filter_by(type='dealer',gameID=gameID).first()
+	pv = player.handvalue 
+	dv = dealer1.handvalue
+	if dv > 21:
+		playerAct =Actions(action_name=username,action_type='Player',actions_game=gameID,action_move='win')
+		db.session.add(playerAct)
+		db.session.commit()
+		user.balance += winnings
+		db.session.commit()
+		return ("You win!")
+	elif(dv==pv):
+		return ("Draw!")
+	elif(pv>21):
+		playerAct =Actions(action_name=username,action_type='Player',actions_game=gameID,action_move='lost')
+		db.session.add(playerAct)
+		db.session.commit()
+		return("Dealer Wins!")
+	elif(dv==pv):
+		playerAct =Actions(action_name=username,action_type='Player',actions_game=gameID,action_move='draw')
+		db.session.add(playerAct)
+		db.session.commit()
+		user.balance += (winnings/2)
+		db.session.commit()
+		return ("Draw!")
+	elif(pv>dv):
+		playerAct =Actions(action_name=username,action_type='Player',actions_game=gameID,action_move='win')
+		db.session.add(playerAct)
+		db.session.commit()
+		return("You win!")
+	elif dv < pv:
+		playerAct =Actions(action_name=username,action_type='Player',actions_game=gameID,action_move='win')
+		db.session.add(playerAct)
+		db.session.commit()	
+		user.balance += winnings
+		db.session.commit()
+		return("You win!")
+	elif dv ==21:
+		return ("dealer wins!")
+	else :
+		playerAct =Actions(action_name=username,action_type='Player',actions_game=gameID,action_move='lost')
+		db.session.add(playerAct)
+		db.swession.commit()
+ 	return ("endhand")
 @app.route('/')
 def hello():
 	return "hi there"
