@@ -263,6 +263,12 @@ def signup():
         flash('User successfully registered')
         return redirect(url_for('login'))
     return render_template('register.html', form=form)
+@app.route('/dashboard')
+@login_required
+def dashboard():
+    games=GamesTable.query.all()
+    gamesList = GamesTable.query.join(ActiveUsers, GamesTable.gameID==ActiveUsers.gameID).add_columns(GamesTable.gameID, GamesTable.NumPlayers).filter(GamesTable.gameID == ActiveUsers.gameID)
+    return render_template('blackjack.html', name=current_user.username,gamesList=gamesList)
 @app.route('/')
 def hello():
 	return "hi there"
