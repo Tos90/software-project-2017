@@ -64,6 +64,18 @@ class ActiveUsers(db.Model):
 
     def __init__(self):
         self.username = current_user.username
+class Seat(db.Model):
+	__tablename__="SeatsTable"
+	seat_id = db.Column("ID",db.Integer,primary_key=True)
+	username = db.Column("username",db.String(255))
+	gameID = db.Column("GameID",db.Integer)
+	seatNum = db.Column("SeatNum",db.Integer)
+	timestamp = db.Column("timestamp",db.DateTime,default=datetime.datetime.utcnow)
+
+	def __init__(self,username,gameID,seatNum):
+		self.username = username
+		self.gameID = gameID
+		self.seatNum = seatNum
 @app.route('/hello')
 def hello_world():
   return render_template('index.html')
