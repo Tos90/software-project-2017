@@ -55,7 +55,7 @@ class GamesTable(db.Model):
 
     def __init__(self,NumPlayers):
         self.NumPlayers = NumPlayers
-class ActiveUsers(Base, db.Model):
+class ActiveUsers(db.Model):
     __tablename__="ActiveUsers"
     ID=db.Column(db.Integer,primary_key=True)
     username=db.Column(db.String(30), index=True, unique=True)
